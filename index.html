@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+<script>(function(s){s.dataset.zone='11731768',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 <meta charset="UTF-8">
 <title>Arena Survivors — Dystopia</title>
 <style>
@@ -87,9 +88,6 @@ canvas { image-rendering:pixelated; background:#101216; box-shadow:0 0 80px rgba
 .charCard .ownedTag { margin-top:6px; font-size:10px; color:#3adf6e; font-weight:bold; }
 #winScreen h1 { color:#3adf6e; text-shadow:0 0 18px rgba(58,223,110,.7), 3px 3px 0 #000; }
 </style>
-
-<!-- Monetag Ad Zone (Banner) -->
-<script data-zone="11731768" src="https://nap5k.com/tag.min.js"></script>
 </head>
 <body>
 <div id="wrap">
@@ -481,6 +479,7 @@ document.getElementById('muteBtn').addEventListener('click',()=>{
   document.getElementById('muteBtn').textContent=audioMuted?'🔇':'🔊';
 });
 window.addEventListener('pointerdown',resumeAudio,{once:true});
+window.addEventListener('keydown',resumeAudio,{once:true});
 
 // ============================================================
 // ================== SAVE ====================================
@@ -1196,6 +1195,8 @@ const groundPattern=ctx.createPattern(groundCanvas,'repeat');
 // ================== INPUT ===================================
 // ============================================================
 const keys={};
+window.addEventListener('keydown',e=>{ keys[e.key.toLowerCase()]=true; if(e.key===' '){ e.preventDefault(); tryDash(); } });
+window.addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
 const joyZone=document.getElementById('joyZone'), joyStick=document.getElementById('joyStick');
 let joyActive=false, joyDx=0, joyDy=0, joyId=null;
 const joyR=78, joyBase={x:0,y:0};
@@ -2511,6 +2512,10 @@ function update(dt){
   let dx=0,dy=0;
   if(p.frozenT>0){ p.frozenT-=dt; }
   else {
+    if(keys['arrowup']||keys['w'])dy-=1;
+    if(keys['arrowdown']||keys['s'])dy+=1;
+    if(keys['arrowleft']||keys['a'])dx-=1;
+    if(keys['arrowright']||keys['d'])dx+=1;
     if(joyActive){ dx+=joyDx; dy+=joyDy; }
     if(p.invertT>0){ p.invertT-=dt; dx*=-1; dy*=-1; }
   }
